@@ -1,7 +1,7 @@
 ---
 title: "Showing off some ggplot2 skills"
-author: "FILL IN YOUR NAME(S) HERE"
-date: </br>`r format(Sys.time(), '%d %B %Y')`
+author: "Benn Jesser"
+date: </br>`r format(Sys.time(), '%11 %4 %2020')`
 output: github_document
 ---
 
@@ -58,25 +58,34 @@ pacman::p_load(ggplot2, here)
 
 Load/read in the data. (Delete this chunk if you don't need it.)
 ```{r data1}
-# library(readr)
-# cool_data <- read_csv(here("data/my-cool-data.csv"))
+library(alr4)
+cool_data <- alr4::MinnWater
 ```
 
-Briefly describe the data here. Then produce the figure.
-
+This is a data set from my Math 463 class that displays water consumption in Minnesota, from 1988 to 2011. I graphed water used for agriculture and water used in municiple areas (not sure of the units :/ )
 ```{r fig1}
-# Plot code here
+ggplot(cool_data)+geom_point(aes(x=year, y=muniUse,col= 'Municiple Use'))+geom_point(aes(x=year, y=irrUse,col='Irrigation Use'))+geom_smooth(aes(x=year, y=muniUse),method = 'lm')+geom_smooth(aes(x=year, y=irrUse),method = 'lm')+labs(x='Year',y='Water Usage')
 ```
+This graph shows the how much water is used for irrigation and municiple use in Minnesota. I threw in a linear best fit line with standard error. Its interesting to see how much more variance there is in the irrigation because of weather, but it can also be seen in municiple use (watering lawns most likely). Intersting topic with increased droughts and water crises thanks to global warming, that often put farmers against municiple water use.
 
-Finally, tell me what I am looking at. Point out anything that you think is of interest. Now do the same for Figs. 2-4 below...
+### Figure 2: S&P 500 
+```{r data1}
+setwd('//BENNS-PC/Users/Richard/Downloads')
+cooler_data<-read.csv(file = '^GSPC.csv')
 
-### Figure 2: Title description
+
+```
 
 ```{r fig2}
-# Plot code here
-```
+library(scales)
+ggplot(cooler_data)+geom_line(aes(x=Volume,y=Close,col='Close'))+geom_smooth(aes(x=Volume,y=Close,col='lm'),method ='lm')+geom_smooth(aes(x=Volume,y=Close,col='gam'),method = 'gam')+geom_smooth(aes(x=Volume,y=Close,col='loess'),method = 'loess')+labs(y='S&P 500 Closing Price')
 
-### Figure 3: Title description
+
+```
+This data is from Yahoo Finance of the S&P 500 Index from the last 6 months. I decided to look at the closing price and trade volume. I graphed the data and then put three regression lines on it. Its interesting to see how badly the  models fit the data at very high trading volumes. This makes sense since high trade volume is synonymous with a volatile market. The effects of COVID-19 are apparent in the fact that high trade volume has shown to be correlated with a lower closing price (contraction/recession). I tried for quite sometime to be able to use the time series data, but could not figure out the scale_x so the dates were obnoxious along the x axis.
+
+### Figure 3: Precious Metals Prices
+
 
 ```{r fig3}
 # Plot code here
