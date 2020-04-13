@@ -81,7 +81,7 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(ggplot2, here)
 ```
 
-### Figure 1: Title description
+### Figure 1: Water Use in Minnesota
 
 Load/read in the data. (Delete this chunk if you don’t need it.)
 
