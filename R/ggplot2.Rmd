@@ -1,6 +1,6 @@
 ---
 title: "Showing off some ggplot2 skills"
-author: "Benn Jesser"
+author: "Benn Jesser and Owen Jetton"
 date: </br>`r format(Sys.time(), '%11 %4 %2020')`
 output: github_document
 ---
@@ -84,16 +84,34 @@ ggplot(cooler_data)+geom_line(aes(x=Volume,y=Close,col='Close'))+geom_smooth(aes
 ```
 This data is from Yahoo Finance of the S&P 500 Index from the last 6 months. I decided to look at the closing price and trade volume. I graphed the data and then put three regression lines on it. Its interesting to see how badly the  models fit the data at very high trading volumes. This makes sense since high trade volume is synonymous with a volatile market. The effects of COVID-19 are apparent in the fact that high trade volume has shown to be correlated with a lower closing price (contraction/recession). I tried for quite sometime to be able to use the time series data, but could not figure out the scale_x so the dates were obnoxious along the x axis.
 
-### Figure 3: Title Description
+### Figure 3: Foreign Currency Exchange Rate to U.S. Dollar
 ```{r data3}
+library(tidyquant, tidyverse, ggplot2)
 
-
+Jan = tq_get("DEXJPUS", get="economic.data", from="2000-01-01")
+Chi = tq_get("DEXCHUS", get="economic.data", from="2000-01-01")
+Can = tq_get("DEXCAUS", get="economic.data", from="2000-01-01")
+Sko = tq_get("DEXKOUS", get="economic.data", from="2000-01-01")
+Mex = tq_get("DEXMXUS", get="economic.data", from="2000-01-01")
 
 ```
+The data I have chosen for this comes from Federal Reserve Economic Data, and the tq_get() command allows me to grab data sets straight from the website. The datasets I have collected here are, in order, the exchange rates of one Japanese Yen, one Chinese Yuan, one Canadian Dollar, one South Korean Won, and one Mexican New Peso to one U.S. dollar. All of the data is daily, and I selected the data after January 1st, 2001.
 
 ```{r fig3}
-# Plot code here
+ggplot() + geom_line(data=Jan, aes(x=date, y=price, color="Black")) +
+  geom_line(data=Chi, aes(x=date, y=price, color="Red")) +
+  geom_line(data=Can, aes(x=date, y=price, color="Green")) +
+  geom_line(data=Sko, aes(x=date, y=price, color= "Blue")) +
+  geom_line(data=Mex, aes(x=date, y=price, color = "Orange")) +
+  scale_y_continuous(trans='log10') + 
+  labs(x = "Date", y = "Foreign Currency Unit to One U.S. Dollar", 
+       title = "Foreign Exchange Rates to U.S. Dollar") +
+  scale_color_identity(name = "Foreign Currencies", guide = "legend",
+      labels = c("Japanese Yen", "South Korean Won", "Canadian Dollar",
+         "Mexican New Peso", "Chinese Yuan")) + theme_bw()
 ```
+This graph plots the different exchange rates of five foreign currencies to one U.S. dollar from January 1st, 2000, to April 10th, 2020. What this shows is how the relationship these currencies have to the U.S. Dollar has changed over the last 20 years. Most have stayed steady, with few shocks to the exchange rate. We can see a similar shock to the Canadian Dollar, Mexican New Peso, and South Korean Yen around 2008, which I attribute to the U.S. financial crisis. It is interesting how the Japanese Yen and Chinese Yuan  appear to have embraced no shock during that period. 
+
 
 ### Figure 4: Title description
 
