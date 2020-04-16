@@ -149,7 +149,7 @@ ggplot(Pdata) +
   labs(title = 'Phillips Curve Over Time',
        subtitle = 'Using Rolling Regressions Over 10 Year Periods',
        caption = 'Date: {frame_time}',
-       x = 'Unemployment Rate', y = 'Inflation Rate') +  
+       x = 'Unemployment Rate (%)', y = 'Inflation Rate (%)') +  
   transition_time(Pdata$date) +
   shadow_mark(past = TRUE, exclude_layer = 2) +
   geom_abline(intercept = Pdata$coefficients..Intercept.,
