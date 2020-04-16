@@ -113,8 +113,46 @@ ggplot() + geom_line(data=Jan, aes(x=date, y=price, color="Black")) +
 This graph plots the different exchange rates of five foreign currencies to one U.S. dollar from January 1st, 2000, to April 10th, 2020. What this shows is how the relationship these currencies have to the U.S. Dollar has changed over the last 20 years. Most have stayed steady, with few shocks to the exchange rate. We can see a similar shock to the Canadian Dollar, Mexican New Peso, and South Korean Yen around 2008, which I attribute to the U.S. financial crisis. It is interesting how the Japanese Yen and Chinese Yuan  appear to have embraced no shock during that period. 
 
 
-### Figure 4: Title description
+### Figure 4: The Change in the Phillips Curve over Time
 
 ```{r fig4}
-# Plot code here
+#Collecting data
+library(gganimate, png, gifski, transformr, roll)
+
+UNR = tq_get("UNRATE", get="economic.data", from="1955-01-01")
+CPI = tq_get("CPIAUCSL", get="economic.data", from="1955-01-01")
+CPI$LPrice = log(CPI$price)
+INFts = ts(diff(CPI$LPrice, lag=12, differences=1), start=c(1955,1), frequency=12)*100
+dates = seq(as.Date('1955-01-01'), as.Date('2019-03-01'), by = 'months')
+INF = data.frame(date= dates, infr= INFts)
+
+Rdata = merge(UNR, INF, by="date")
+
+regs = roll_lm(
+  Rdata$price,
+  Rdata$infr,
+  width = 120,
+  weights = rep(1, 120),
+  intercept = TRUE,
+  min_obs = 120,
+  complete_obs = TRUE,
+  na_restore = FALSE,
+  online = TRUE
+)
+
+lines = data.frame(date = dates, regs["coefficients"])
+Pdata = merge(Rdata, lines, by="date")
+
+#plotting the graph
+ggplot(Pdata) +
+  geom_point(aes(x=price, y=infr)) +
+  labs(title = 'Phillips Curve Over Time',
+       subtitle = 'Using Rolling Regressions Over 10 Year Periods',
+       caption = 'Date: {frame_time}',
+       x = 'Unemployment Rate', y = 'Inflation Rate') +  
+  transition_time(Pdata$date) +
+  shadow_mark(past = TRUE, exclude_layer = 2) +
+  geom_abline(intercept = Pdata$coefficients..Intercept.,
+              slope = Pdata$coefficients.x1, color = 'blue')
 ```
+The graphs considers the macroeconomic concept of the Phillips curve, and tracks the actual data over time using rolling regressions. The Phillips Curve theorizes an inverse relationship between unemployment and inflation. Using unemployment and price index data (transformed into inflation) from FRED, this graph shows how that relationship has changed over the last 60 years. We can see that an inverse relationship was present from the 1960s until around 2000, when the curve flattened. Since then, as the graph shows, the curve has remained relatively flat. This indicates that inflation in the U.S.is not as responsive to unemployment as it was in the last half of the 20th century.
