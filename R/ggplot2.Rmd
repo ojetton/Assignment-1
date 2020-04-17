@@ -86,7 +86,8 @@ This data is from Yahoo Finance of the S&P 500 Index from the last 6 months. I d
 
 ### Figure 3: Foreign Currency Exchange Rate to U.S. Dollar
 ```{r data3}
-library(tidyquant, tidyverse, ggplot2)
+
+library(tidyquant, tidyverse)
 
 Jan = tq_get("DEXJPUS", get="economic.data", from="2000-01-01")
 Chi = tq_get("DEXCHUS", get="economic.data", from="2000-01-01")
@@ -95,7 +96,7 @@ Sko = tq_get("DEXKOUS", get="economic.data", from="2000-01-01")
 Mex = tq_get("DEXMXUS", get="economic.data", from="2000-01-01")
 
 ```
-The data I have chosen for this comes from Federal Reserve Economic Data, and the tq_get() command allows me to grab data sets straight from the website. The datasets I have collected here are, in order, the exchange rates of one Japanese Yen, one Chinese Yuan, one Canadian Dollar, one South Korean Won, and one Mexican New Peso to one U.S. dollar. All of the data is daily, and I selected the data after January 1st, 2001.
+The data I have chosen for this comes from Federal Reserve Economic Data, and the tq_get() command allows me to grab data sets straight from the website. The datasets I have collected are, in order, the exchange rates of one Japanese Yen, one Chinese Yuan, one Canadian Dollar, one South Korean Won, and one Mexican New Peso to one U.S. dollar. All of the data is daily, and I selected the data after January 1st, 2001.
 
 ```{r fig3}
 ggplot() + geom_line(data=Jan, aes(x=date, y=price, color="Black")) +
@@ -117,7 +118,10 @@ This graph plots the different exchange rates of five foreign currencies to one 
 
 ```{r fig4}
 #Collecting data
-library(gganimate, png, gifski, transformr, roll)
+library(gganimate)
+library(png)
+library(gifski)
+library(roll)
 
 UNR = tq_get("UNRATE", get="economic.data", from="1955-01-01")
 CPI = tq_get("CPIAUCSL", get="economic.data", from="1955-01-01")
@@ -155,4 +159,4 @@ ggplot(Pdata) +
   geom_abline(intercept = Pdata$coefficients..Intercept.,
               slope = Pdata$coefficients.x1, color = 'blue')
 ```
-The graphs considers the macroeconomic concept of the Phillips curve, and tracks the actual data over time using rolling regressions. The Phillips Curve theorizes an inverse relationship between unemployment and inflation. Using unemployment and price index data (transformed into inflation) from FRED, this graph shows how that relationship has changed over the last 60 years. We can see that an inverse relationship was present from the 1960s until around 2000, when the curve flattened. Since then, as the graph shows, the curve has remained relatively flat. This indicates that inflation in the U.S.is not as responsive to unemployment as it was in the last half of the 20th century.
+This graph considers the macroeconomic concept of the Phillips curve, and tracks the actual data over time using rolling regressions. The Phillips Curve theorizes an inverse relationship between unemployment and inflation. Using unemployment and price index data (transformed into inflation) from FRED, this graph shows how that relationship has changed over the last 60 years. We can see that an inverse relationship was present from the 1960s until around 2000, when the curve flattened. Since then, as the graph shows, the curve has remained relatively flat. This indicates that inflation in the U.S.is not as responsive to unemployment as it was in the last half of the 20th century.
