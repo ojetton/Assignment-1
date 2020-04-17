@@ -7,3 +7,14 @@ car
 effects
 alr4
 scales
+lubridate
+zoo
+xts
+PerformanceAnalytics
+TTR
+quantmod
+tidyquant
+gganimate
+png
+gifski
+roll
